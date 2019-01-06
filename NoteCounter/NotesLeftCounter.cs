@@ -40,7 +40,7 @@ namespace NotesLeftCounter
             _counter.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1f);
             _counter.overflowMode = TextOverflowModes.Overflow;
             _counter.enableWordWrapping = false;
-            _counter.rectTransform.localPosition = new Vector3(-0.1f, 3f, 7f);
+            _counter.rectTransform.localPosition = new Vector3(-0.1f, 3.5f, 8f);
 
             _noteCount = Plugin.LevelData.difficultyBeatmap.beatmapData.notesCount;
         }
