@@ -12,10 +12,10 @@ namespace NotesLeftCounter
     public class Plugin : IPlugin
     {
         public string Name => "NotesLeftCounter";
-        public string Version => "1.0.0";
+        public string Version => "1.1.0";
 
         private BeatmapObjectSpawnController _spawnController;
-        public static StandardLevelSceneSetupDataSO LevelData { get; private set; }
+        public static BS_Utils.Gameplay.LevelData LevelData { get; private set; }
         private NotesLeftCounter _notesLeftCounter;
         public static bool CountersPlusInstalled { get; private set; } = false;
 
@@ -45,11 +45,11 @@ namespace NotesLeftCounter
                 _spawnController.noteWasMissedEvent -= _spawnController_noteWasMissedEvent;
 
                 if (LevelData == null)
-                    LevelData = Resources.FindObjectsOfTypeAll<StandardLevelSceneSetupDataSO>().FirstOrDefault();
+                    LevelData = BS_Utils.Plugin.LevelData;
                 if (LevelData == null) return;
 
 
-                if (NotesLeftCounterUI.ShowNoteCounter && LevelData.gameplayCoreSetupData.practiceSettings == null)
+                if (NotesLeftCounterUI.ShowNoteCounter && LevelData.GameplayCoreSceneSetupData.practiceSettings == null)
                 {
                     Log("Attempting to Create Note Counter");
                     _spawnController.noteWasCutEvent += _spawnController_noteWasCutEvent;
@@ -82,7 +82,7 @@ namespace NotesLeftCounter
 
         private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode arg1)
         {
-            if (scene.name == "Menu")
+            if (scene.name == "MenuCore")
                 NotesLeftCounterUI.CreateUI();
 
         }

@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-
+using UnityEngine.UI;
 namespace NotesLeftCounter
 {
     public class NotesLeftCounter : MonoBehaviour
     {
         public int _noteCount { get; private set; }
-        private TextMeshPro _counter;
+        private TextMeshProUGUI _counter;
 
        
         private void Awake()
@@ -30,19 +30,27 @@ namespace NotesLeftCounter
 
         void Init()
         {
-            _counter = gameObject.AddComponent<TextMeshPro>();
-            _counter.text = "Notes Remaining  " + Plugin.LevelData.difficultyBeatmap.beatmapData.notesCount.ToString();
-            _counter.fontSize = 3;
-            _counter.color = Color.white;
+         //   gameObject.transform.position = new Vector3(-0.1f, 3.5f, 8f);
+            Canvas canvas = gameObject.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.WorldSpace;
+            CanvasScaler cs = gameObject.AddComponent<CanvasScaler>();
+            cs.scaleFactor = 10.0f;
+            cs.dynamicPixelsPerUnit = 10f;
+            GraphicRaycaster gr = gameObject.AddComponent<GraphicRaycaster>();
+            gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1f);
+            gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1f);
+
+            _counter = CustomUI.BeatSaber.BeatSaberUI.CreateText(canvas.transform as RectTransform, "Notes Remaining  " +
+                Plugin.LevelData.GameplayCoreSceneSetupData.difficultyBeatmap.beatmapData.notesCount.ToString(), new Vector2(0, 0));
             _counter.alignment = TextAlignmentOptions.Center;
-            _counter.font = Resources.Load<TMP_FontAsset>("Teko-Medium SDF No Glow");
+            _counter.transform.localScale *= .12f;
+            _counter.fontSize = 2.5f;
+            _counter.color = Color.white;
             _counter.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1f);
             _counter.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1f);
-            _counter.overflowMode = TextOverflowModes.Overflow;
             _counter.enableWordWrapping = false;
-            _counter.rectTransform.localPosition = new Vector3(-0.1f, 3.5f, 8f);
-
-            _noteCount = Plugin.LevelData.difficultyBeatmap.beatmapData.notesCount;
+            _counter.transform.localPosition = new Vector3(-0.1f, 3.5f, 8f);
+            _noteCount = Plugin.LevelData.GameplayCoreSceneSetupData.difficultyBeatmap.beatmapData.notesCount;
         }
 
         public void UpdateCounter()
