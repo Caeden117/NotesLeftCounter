@@ -12,7 +12,7 @@ namespace NotesLeftCounter
     public class Plugin : IPlugin
     {
         public string Name => "NotesLeftCounter";
-        public string Version => "1.1.0";
+        public string Version => "1.1.1";
 
         private BeatmapObjectSpawnController _spawnController;
         public static BS_Utils.Gameplay.LevelData LevelData { get; private set; }
@@ -25,7 +25,7 @@ namespace NotesLeftCounter
             SceneManager.sceneLoaded += SceneManager_sceneLoaded;
             NotesLeftCounterUI.ReadPrefs();
 
-            if (PluginManager.Plugins.Any(x => x.Name == "Counters+"))
+            if (IPA.Loader.PluginManager.Plugins.Any(x => x.Name == "Counters+") || IPA.Loader.PluginManager.AllPlugins.Any(x => x.Metadata.Id == "Counters+"))
             {
                 CountersPlusInstalled = true;
                 AddCustomCounter();
@@ -49,7 +49,7 @@ namespace NotesLeftCounter
                 if (LevelData == null) return;
 
 
-                if (NotesLeftCounterUI.ShowNoteCounter && LevelData.GameplayCoreSceneSetupData.practiceSettings == null)
+                if (NotesLeftCounterUI.ShowNoteCounter && LevelData?.GameplayCoreSceneSetupData?.practiceSettings == null)
                 {
                     Log("Attempting to Create Note Counter");
                     _spawnController.noteWasCutEvent += _spawnController_noteWasCutEvent;
@@ -117,7 +117,7 @@ namespace NotesLeftCounter
             {
                 JSONName = "notesLeftCounter", //Name in config system. Also used as an identifier. Don't plan on changing this.
                 Name = "Notes Left", //Display name that will appear in the SettingsUI.
-                Mod = this, //IPA Plugin. Will show up in Credits in the SettingsUI.
+                Mod = (IPA.Old.IPlugin)this, //IPA Plugin. Will show up in Credits in the SettingsUI.
                 Counter = "NotesLeftCounter", //Name of the GameObject that holds your Counter component. Used to hook into the Counters+ system.
             };
             CountersPlus.Config.ICounterPositions[] positions = new CountersPlus.Config.ICounterPositions[6] { CountersPlus.Config.ICounterPositions.AboveCombo, CountersPlus.Config.ICounterPositions.AboveHighway, CountersPlus.Config.ICounterPositions.AboveMultiplier, CountersPlus.Config.ICounterPositions.BelowCombo, CountersPlus.Config.ICounterPositions.BelowEnergy, CountersPlus.Config.ICounterPositions.BelowMultiplier } ;
