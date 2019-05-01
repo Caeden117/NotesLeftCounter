@@ -115,13 +115,20 @@ namespace NotesLeftCounter
             Log("Creating Custom Counter");
             CustomCounter counter = new CustomCounter
             {
-                JSONName = "notesLeftCounter", //Name in config system. Also used as an identifier. Don't plan on changing this.
+                SectionName = "notesLeftCounter", //Name in config system. Also used as an identifier. Don't plan on changing this.
                 Name = "Notes Left", //Display name that will appear in the SettingsUI.
                 Mod = (IPA.Old.IPlugin)this, //IPA Plugin. Will show up in Credits in the SettingsUI.
                 Counter = "NotesLeftCounter", //Name of the GameObject that holds your Counter component. Used to hook into the Counters+ system.
             };
-            CountersPlus.Config.ICounterPositions[] positions = new CountersPlus.Config.ICounterPositions[6] { CountersPlus.Config.ICounterPositions.AboveCombo, CountersPlus.Config.ICounterPositions.AboveHighway, CountersPlus.Config.ICounterPositions.AboveMultiplier, CountersPlus.Config.ICounterPositions.BelowCombo, CountersPlus.Config.ICounterPositions.BelowEnergy, CountersPlus.Config.ICounterPositions.BelowMultiplier } ;
-            CustomCounterCreator.CreateCustomCounter(counter, positions);
+
+            CustomConfigModel defaults = new CustomConfigModel(counter.Name)
+            {
+                Enabled = true,
+                Position = CountersPlus.Config.ICounterPositions.AboveHighway,
+                Index = 0,
+            };
+
+            CustomCounterCreator.Create(counter, defaults); //Using no ICounterPositions for params defaults to it being able to use all 6.
         }
 
 
